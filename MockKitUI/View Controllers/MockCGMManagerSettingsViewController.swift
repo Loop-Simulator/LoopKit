@@ -30,7 +30,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "CGM Setti"
+        title = "CGM Settings"
 
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
