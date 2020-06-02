@@ -17,6 +17,8 @@ public struct MockCGMDataSource {
         case constant(_ glucose: HKQuantity)
         case sineCurve(parameters: SineCurveParameters)
         case noData
+        //Bluetooth Simulator model
+        case bluetoothSimulator
     }
 
     public struct Effects {
@@ -72,7 +74,7 @@ public struct MockCGMDataSource {
     public init(
         model: Model,
         effects: Effects = .init(),
-        dataPointFrequency: TimeInterval = /* minutes */ 5 * 60
+        dataPointFrequency: TimeInterval = /* minutes */ 1 * 60 //change time interval for matlab simulator
     ) {
         self.model = model
         self.effects = effects
@@ -129,6 +131,7 @@ extension MockCGMDataSource.Model: RawRepresentable {
         case constant = "constant"
         case sineCurve = "sineCurve"
         case noData = "noData"
+        case bluetoothSimulator = "bluetoothSimulator"
     }
 
     private static let unit = HKUnit.milligramsPerDeciliter
@@ -169,7 +172,10 @@ extension MockCGMDataSource.Model: RawRepresentable {
             self = .sineCurve(parameters: (baseGlucose: baseGlucose, amplitude: amplitude, period: period, referenceDate: referenceDate))
         case .noData:
             self = .noData
+        case .bluetoothSimulator:
+            self = .bluetoothSimulator
         }
+        
     }
 
     public var rawValue: RawValue {
@@ -186,6 +192,8 @@ extension MockCGMDataSource.Model: RawRepresentable {
             rawValue["referenceDate"] = referenceDate.timeIntervalSince1970
         case .noData:
             break
+        case .bluetoothSimulator:
+            rawValue["quantity"] = 120
         }
 
         return rawValue
@@ -199,6 +207,8 @@ extension MockCGMDataSource.Model: RawRepresentable {
             return .sineCurve
         case .noData:
             return .noData
+        case .bluetoothSimulator:
+            return .bluetoothSimulator
         }
     }
 }

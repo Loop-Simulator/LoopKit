@@ -111,6 +111,13 @@ extension MockGlucoseProvider {
     fileprivate static var noData: MockGlucoseProvider {
         return MockGlucoseProvider { _, completion in completion(.noData) }
     }
+    
+    fileprivate static var bluetoothSimulator: MockGlucoseProvider {
+        return MockGlucoseProvider { date, completion in
+            let sample = glucoseSample(at: date, quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: 120))
+            completion(.newData([sample]))
+        }
+    }
 
     fileprivate static func error(_ error: Error) -> MockGlucoseProvider {
         return MockGlucoseProvider { _, completion in completion(.error(error)) }
@@ -208,6 +215,8 @@ private extension MockCGMDataSource.Model {
             return .sineCurve(parameters: parameters)
         case .noData:
             return .noData
+        case .bluetoothSimulator:
+            return .bluetoothSimulator
         }
     }
 }

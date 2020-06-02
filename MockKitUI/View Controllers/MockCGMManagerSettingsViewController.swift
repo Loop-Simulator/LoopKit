@@ -68,6 +68,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case constant = 0
         case sineCurve
         case noData
+        //bluetooth simulator uI
+        case bluetoothSimulator
     }
 
     private enum EffectsRow: Int, CaseIterable {
@@ -150,6 +152,11 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .noData:
                 cell.textLabel?.text = "No Data"
                 if case .noData = cgmManager.dataSource.model {
+                    cell.accessoryType = .checkmark
+                }
+            case .bluetoothSimulator:
+                cell.textLabel?.text = "Bluetooth Simulator"
+                if case .bluetoothSimulator = cgmManager.dataSource.model {
                     cell.accessoryType = .checkmark
                 }
             }
@@ -243,6 +250,9 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 show(vc, sender: sender)
             case .noData:
                 cgmManager.dataSource.model = .noData
+                tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
+            case .bluetoothSimulator:
+                cgmManager.dataSource.model = .bluetoothSimulator
                 tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
             }
         case .effects:
